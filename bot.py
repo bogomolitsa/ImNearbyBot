@@ -331,24 +331,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ai_reply = await get_ai_response(text)
         await update.message.reply_text(ai_reply)
 
-    import threading
-    from http.server import BaseHTTPRequestHandler, HTTPServer
-
-    class Handler(BaseHTTPRequestHandler):
-        def do_GET(self):
-            self.send_response(200)
-            self.end_headers()
-            self.wfile.write(b"ok")
-
-    import os
-
-    def run_server():
-        port = int(os.environ.get("PORT", 10000))
-        server = HTTPServer(("0.0.0.0", port), Handler)
-        server.serve_forever()
-
-    threading.Thread(target=run_server, daemon=True).start()
-
     # Запуск
 def main():
     app = ApplicationBuilder().token(TOKEN).connect_timeout(30).read_timeout(30).build()
