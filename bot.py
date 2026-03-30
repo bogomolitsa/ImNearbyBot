@@ -105,21 +105,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def get_ai_response(user_text):
     try:
-        response = client.chat.completions.create(
+        response = client.responses.create(
             model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "Ты — мягкий, поддерживающий ассистент для подростков. Отвечай коротко, тепло и без давления."
-                },
-                {"role": "user", "content": user_text}
-            ],
-            max_tokens=150
+            input=user_text
         )
-        return response.choices[0].message.content
+        return response.output[0].content[0].text
 
     except Exception as e:
-        print(e)  # 👈 ВОТ ЭТО ГЛАВНОЕ
+        print(e)
         return "ошибка 🤍 смотри консоль"
 
 # Обработка сообщений
