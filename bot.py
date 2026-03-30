@@ -105,11 +105,13 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def get_ai_response(user_text):
     try:
-        response = client.responses.create(
+        response = client.chat.completions.create(
             model="gpt-4o-mini",
-            input=user_text
+            messages=[
+                {"role": "user", "content": user_text}
+            ]
         )
-        return response.output[0].content[0].text
+        return response.choices[0].message.content
 
     except Exception as e:
         print(e)
