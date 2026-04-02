@@ -30,6 +30,14 @@ main_keyboard = [
 ]
 reply_markup = ReplyKeyboardMarkup(main_keyboard, resize_keyboard=True)
 
+main2_keyboard = [
+    ["💔 Мне плохо"],
+    ["📅 Помочь с делами"],
+    ["📱 Я зависаю в телефоне"],
+    ["💬 Просто поговорить"]
+]
+main2_markup = ReplyKeyboardMarkup(main2_keyboard, resize_keyboard=True)
+
 # Меню "Мне плохо"
 mood_keyboard = [
     ["😞 Грустно", "😣 Тревожно"],
