@@ -25,18 +25,19 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Главное меню
 main_keyboard = [
-    ["Мне сейчас непросто"],
-    ["Помощь"]
+    ["🤍 Мне сейчас непросто"],
+    ["🆘 Помощь"]
 ]
+
 reply_markup = ReplyKeyboardMarkup(main_keyboard, resize_keyboard=True)
 
-main2_keyboard = [
+old_main_keyboard = [
     ["💔 Мне плохо"],
     ["📅 Помочь с делами"],
     ["📱 Я зависаю в телефоне"],
     ["💬 Просто поговорить"]
 ]
-main2_markup = ReplyKeyboardMarkup(main2_keyboard, resize_keyboard=True)
+old_reply_markup = ReplyKeyboardMarkup(old_main_keyboard, resize_keyboard=True)
 
 # Меню "Мне плохо"
 mood_keyboard = [
@@ -135,24 +136,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    elif text == "Мне сейчас непросто":
+    elif text == "🤍 Мне сейчас непросто":
         await update.message.reply_text(
             "здесь можно быть честным 🤍\nчто сейчас откликается?",
-            reply_markup=reply_markup
-        )
-
-    elif text == "Помощь":
-        await update.message.reply_text(
-            "советуем прописать команду /us для ознакомления с функциями бота и описанием других команд и кнопок 🤍\n\n"
-            "если тебе сейчас очень тяжело:\n"
-            "— попробуй написать близкому человеку\n"
-            "— или обратиться в службы поддержки\n\n"
-            "ты не обязан(а) справляться с этим в одиночку"
-            "для предложения своих идей или личной помощи вскоре добавим предложку бота ImNearby"
+            reply_markup=old_reply_markup
         )
 
     # Главное меню
-    if text == "💔 Мне плохо":
+    elif text == "💔 Мне плохо":
         await update.message.reply_text(
             "я рядом 🤍\n"
             "что сейчас больше всего откликается?",
