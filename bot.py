@@ -2,6 +2,8 @@ from openai import OpenAI
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 import os
+import asyncio
+import  random
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
@@ -22,6 +24,23 @@ TOKEN = os.getenv("TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 client = OpenAI(api_key=OPENAI_API_KEY)
+
+crisis_words = [
+    "хочу умереть",
+    "не хочу жить",
+    "покончить с собой",
+    "суицид",
+    "убить себя",
+    "я не справлюсь",
+    "жить не хочется",
+    "все бессмысленно",
+    "лучше бы меня не было",
+    "хочу исчезнуть"
+]
+
+def is_crisis(text):
+    text = text.lower()
+    return any(word in text for word in crisis_words)
 
 # Главное меню
 main_keyboard = [
@@ -95,6 +114,14 @@ phone_keyboard = [
 
 phone_markup = ReplyKeyboardMarkup(phone_keyboard, resize_keyboard=True)
 
+practice_keyboard = [
+    ["🌿 Расслабиться", "🎯 Сконцентрироваться"],
+    ["💨 Выдохнуть"],
+    ["🔙 Назад"]
+]
+
+practice_markup = ReplyKeyboardMarkup(practice_keyboard, resize_keyboard=True)
+
 # Минимальное меню (только назад)
 minimal_keyboard = [
     ["🔙 Назад"]
@@ -122,7 +149,210 @@ async def get_ai_response(user_text):
 
     except Exception as e:
         print(e)
-        return "ошибка 🤍 смотри консоль"
+        return "к сожалению, я не могу помочь тебе с этим сейчас." \
+               "если у тебя есть новые идеи - пропиши команду us"
+
+async def crisis_response(update: Update):
+    responses = [
+        (
+            "сейчас может быть очень тяжело\n"
+            "ты не обязан(а) справляться с этим одному(одной)\n\n"
+
+            "если есть возможность — попробуй написать кому-то из близких\n"
+            "даже короткое сообщение уже шаг\n\n"
+
+            "можно обратиться за поддержкой:\n"
+            "📞 8-800-2000-122 — детский телефон доверия (РФ)\n"
+            "📞 8-499-791-20-50 — психологическая помощь\n\n"
+
+            "если становится хуже — важно не оставаться одному(одной)"
+        ),
+
+        (
+            "я слышу, что тебе сейчас непросто\n\n"
+
+            "попробуй немного замедлиться:\n"
+            "сделай медленный вдох и выдох\n\n"
+
+            "и, пожалуйста, свяжись с кем-то из людей рядом\n"
+            "или обратись сюда:\n"
+            "📞 8-800-2000-122\n\n"
+
+            "поддержка есть, и ты можешь к ней обратиться"
+        ),
+
+        (
+            "в такие моменты важно не оставаться наедине с этим\n\n"
+
+            "если можешь — позвони или напиши кому-то из близких\n"
+            "или обратись за помощью:\n"
+            "📞 8-800-2000-122\n"
+            "📞 8-499-791-20-50\n\n"
+
+            "ты не должен(на) справляться с этим в одиночку"
+        ),
+
+        (
+            "сейчас не нужно решать всё сразу\n"
+            "достаточно просто пережить этот момент\n\n"
+
+            "если есть возможность — будь рядом с кем-то\n"
+            "или обратись за поддержкой:\n"
+            "📞 8-800-2000-122\n\n"
+
+            "помощь рядом, и к ней можно обратиться"
+        )
+    ]
+
+    await update.message.reply_text(random.choice(responses))
+
+if is_crisis(text):
+    await crisis_response(update)
+    return
+
+async def us(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_animation(
+        animation="https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyODF5YzF4amF2azIwaG9nOHdwcHJld3hnb3ZwY2UyMWJtZTdwYTlpeCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/O1w2wSTriddUA/giphy.gif",
+        caption=(
+            "я рядом, чтобы немного разгрузить твою голову 🤍\n\n"
+            "здесь ты можешь увидеть команды для бота\n"
+            "/practice — техники для расслабления и полной перезагрузки\n"
+            "/surprise — сюрприииз!\n"
+            "/motivation — немного мотивации для тебя\n"
+            "/pic — эстетика\n"
+            "/picanimals — смотри, какие милашки!\n"
+            "/new — будущие нововведения\n\n"
+            "можешь просто написать мне, если не знаешь с чего начать"
+            "если у тебяя есть новые идеи, обратись сюда - @superson11c"
+        )
+    )
+
+async def surprise(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    messages = [
+        "ты не обязан(а) быть удобным для всех 🤍",
+        "иногда ты держишься сильнее, чем сам(а) это замечаешь",
+        "ты уже прошёл(ла) через многое — и это что-то значит",
+        "можно не быть идеальным(ой), чтобы быть ценным(ой)",
+        "даже в твоём «я устал(а)» есть огромная сила",
+        "ты имеешь право просто быть, без объяснений",
+        "не всё должно получаться с первого раза",
+        "ты не отстаёшь, у тебя свой темп",
+    ]
+
+    await update.message.reply_text(random.choice(messages))
+
+async def practice(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "давай немного позаботимся о тебе 🤍\nчто сейчас нужнее?",
+        reply_markup=practice_markup
+    )
+
+async def motivation(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    messages = [
+        "не нужно делать идеально — достаточно начать",
+        "маленький шаг — это уже движение вперёд",
+        "ты можешь двигаться в своём темпе",
+        "даже если сегодня мало — это всё равно что-то",
+        "ты не ленишься, ты устаёшь — и это нормально",
+        "иногда отдых — это тоже часть продуктивности",
+        "сейчас не нужно всё, только следующий маленький шаг",
+        "иногда ^все и сразу^ получается менее качественно, чем маленькие, но уверенные шаги"
+    ]
+
+    await update.message.reply_text(random.choice(messages))
+
+async def picanimals(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    content = [
+        (
+            "https://images.unsplash.com/photo-1518791841217-8f162f1e1131",
+            "котик просто лежит и ничего не делает — и этого достаточно 🤍"
+        ),
+        (
+            "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8",
+            "иногда можно просто быть, как этот пёс"
+        ),
+        (
+            "https://images.unsplash.com/photo-1507149833265-60c372daea22",
+            "животные не требуют от себя невозможного"
+        ),
+        (
+            "https://images.unsplash.com/photo-1543852786-1cf6624b9987",
+            "ты можешь быть мягким(ой) к себе"
+        ),
+        (
+            "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9",
+            "иногда отдых — это самое важное"
+        )
+    ]
+
+    img, text = random.choice(content)
+
+    await update.message.reply_photo(
+        photo=img,
+        caption=text
+    )
+
+    await update.message.reply_text(random.choice(messages))
+
+async def pic(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    content = [
+        (
+            "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+            "иногда тишина — это уже достаточно 🤍"
+        ),
+        (
+            "https://images.unsplash.com/photo-1493244040629-496f6d136cc3",
+            "мир не всегда спешит, и ты тоже можешь"
+        ),
+        (
+            "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+            "есть моменты, где просто быть — уже достаточно"
+        ),
+        (
+            "https://images.unsplash.com/photo-1518837695005-2083093ee35b",
+            "ты не обязан(а) успевать всё сразу"
+        ),
+        (
+            "https://images.unsplash.com/photo-1470770841072-f978cf4d019e",
+            "даже пауза — это часть движения"
+        )
+    ]
+
+    img, text = random.choice(content)
+
+    await update.message.reply_photo(
+        photo=img,
+        caption=text
+    )
+
+    await update.message.reply_text(random.choice(messages))
+
+async def new(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "этот бот будет расти вместе с тобой 🤍\n\n"
+        "в планах:\n"
+        "— больше практик\n"
+        "— больше советов\n"
+        "— полная работоспособность ии"
+    )
+
+async def breathing(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    msg = await update.message.reply_text("давай попробуем вместе 🤍")
+
+    # вдох
+    await msg.edit_text("🌿 вдох...\n(1...2...3...4)")
+    await asyncio.sleep(4)
+
+    # задержка
+    await msg.edit_text("⏸ держим...\n(1...2...3...4)")
+    await asyncio.sleep(4)
+
+    # выдох
+    await msg.edit_text("💨 выдох...\n(1...2...3...4...5...6)")
+    await asyncio.sleep(6)
+
+    # завершение
+    await msg.edit_text("🤍 ты справился(ась)\nможешь повторить, если захочешь")
 
 # Обработка сообщений
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -335,6 +565,29 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=minimal_markup
         )
 
+    elif text == "🌿 Расслабиться":
+        await update.message.reply_text(
+            "давай попробуем снять напряжение 🤍\n\n"
+            "сделай медленный вдох на 4 секунды\n"
+            "задержи дыхание на 4\n"
+            "и медленно выдохни на 6\n\n"
+            "повтори это 3–5 раз\n"
+            "я побуду с тобой"
+        )
+
+    elif text == "🎯 Сконцентрироваться":
+        await update.message.reply_text(
+            "давай мягко вернём фокус 🤍\n\n"
+            "назови про себя:\n"
+            "— 3 вещи, которые ты видишь\n"
+            "— 2 вещи, которые ты слышишь\n"
+            "— 1 вещь, которую ты чувствуешь телом\n\n"
+            "это поможет немного заземлиться"
+        )
+
+    elif text == "💨 Выдохнуть":
+        await breathing(update, context)
+
     else:
         ai_reply = await get_ai_response(text)
         await update.message.reply_text(ai_reply)
@@ -345,6 +598,13 @@ def main():
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    app.add_handler(CommandHandler("surprise", surprise))
+    app.add_handler(CommandHandler("practice", practice))
+    app.add_handler(CommandHandler("us", help_command))
+    app.add_handler(CommandHandler("motivation", motivation))
+    app.add_handler(CommandHandler("pic", pic))
+    app.add_handler(CommandHandler("picanimals", picanimals))
+    app.add_handler(CommandHandler("new", new))
 
     print("Бот запущен...")
     app.run_polling(poll_interval=0.2, timeout=20)
