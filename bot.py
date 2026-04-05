@@ -594,7 +594,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Запуск
 def main():
-    print(TOKEN)
+    print("HELLOOOOO!!!!")
     app = ApplicationBuilder().token(TOKEN).connect_timeout(30).read_timeout(30).build()
 
     app.add_handler(CommandHandler("start", start))
@@ -609,7 +609,7 @@ def main():
     app = ApplicationBuilder().token(TOKEN).build()
 
     print("Бот запущен...")
-    app.run_polling(poll_interval=0.2, timeout=20)
+    app.run_polling
 
     print("TOKEN:", TOKEN)
     main()
