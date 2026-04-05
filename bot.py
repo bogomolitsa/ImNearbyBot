@@ -600,11 +600,12 @@ def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     app.add_handler(CommandHandler("surprise", surprise))
     app.add_handler(CommandHandler("practice", practice))
-    app.add_handler(CommandHandler("us", help_command))
+    app.add_handler(CommandHandler("us", us))
     app.add_handler(CommandHandler("motivation", motivation))
     app.add_handler(CommandHandler("pic", pic))
     app.add_handler(CommandHandler("picanimals", picanimals))
     app.add_handler(CommandHandler("new", new))
+    app = ApplicationBuilder().token(TOKEN).build()
 
     print("Бот запущен...")
     app.run_polling(poll_interval=0.2, timeout=20)
