@@ -185,6 +185,7 @@ async def us(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "/new — будущие нововведения\n\n"
             "можешь просто написать мне, если не знаешь с чего начать"
             "если у тебяя есть новые идеи, обратись сюда - @superson11c"
+        ))
 
 async def surprise(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(random.choice([
