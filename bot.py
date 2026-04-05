@@ -611,7 +611,5 @@ def main():
     print("Бот запущен...")
     app.run_polling(poll_interval=0.2, timeout=20)
 
-
-if __name__ == "__main__":
     print("TOKEN:", TOKEN)
     main()
