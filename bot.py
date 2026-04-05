@@ -594,6 +594,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Запуск
 def main():
+    print(TOKEN)
     app = ApplicationBuilder().token(TOKEN).connect_timeout(30).read_timeout(30).build()
 
     app.add_handler(CommandHandler("start", start))
