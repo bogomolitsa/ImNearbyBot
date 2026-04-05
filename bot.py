@@ -12,6 +12,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
         self.wfile.write(b"ok")
+        print("класс работает")
 
 def run_server():
     port = int(os.environ.get("PORT", 10000))
@@ -208,12 +209,12 @@ async def crisis_response(update: Update):
     ]
 
     await update.message.reply_text(random.choice(responses))
+    print("кризис робит")
 
     if is_crisis(text):
         await crisis_response(update)
         return
-
-print("старт робит")
+    print("старт робит")
 
 async def us(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_animation(
@@ -596,11 +597,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         ai_reply = await get_ai_response(text)
         await update.message.reply_text(ai_reply)
-
-print("элифы работают")
+    print("элифы работают")
 
     # Запуск
 def main():
 
     print("бот запущен")
     main()
+print("а с новой строчки робит")
