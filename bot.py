@@ -397,6 +397,17 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "можно начать с очень маленького шага\n"
             "например, просто отложить телефон на пару минут 🤍")
 
+    async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+        text = update.message.text.strip()
+
+        # Обработка кнопки "Помощь"
+    if text == "🆘 Помощь":
+        await update.message.reply_text("Что-ты подробнее разобраться в том, что умеет бот введи команду /us. по всем вопросам бота ты всегда можешь обратиться @superson11c."
+            "если ты на грани, пожалуйста обратись к близким людям или сюда за помощью:\n"
+            "📞 8-800-2000-122 — детский телефон доверия (РФ)\n"
+            "📞 8-499-791-20-50 — психологическая помощь\\nn"
+            "поддержка есть, и ты можешь к ней обратиться")
+
     elif text == "🌿 Расслабиться":
         await update.message.reply_text(
             "давай попробуем снять напряжение 🤍\n\n"
