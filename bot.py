@@ -206,9 +206,9 @@ async def crisis_response(update: Update):
 
     await update.message.reply_text(random.choice(responses))
 
-if is_crisis(text):
-    await crisis_response(update)
-    return
+    if is_crisis(text):
+        await crisis_response(update)
+        return
 
 async def us(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_animation(
