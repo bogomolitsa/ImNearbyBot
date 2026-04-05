@@ -601,22 +601,6 @@ print("элифы работают")
 
     # Запуск
 def main():
-    print("HELLOOOOO!!!!")
-    app = ApplicationBuilder().token(TOKEN).connect_timeout(30).read_timeout(30).build()
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    app.add_handler(CommandHandler("surprise", surprise))
-    app.add_handler(CommandHandler("practice", practice))
-    app.add_handler(CommandHandler("us", us))
-    app.add_handler(CommandHandler("motivation", motivation))
-    app.add_handler(CommandHandler("pic", pic))
-    app.add_handler(CommandHandler("picanimals", picanimals))
-    app.add_handler(CommandHandler("new", new))
-    app = ApplicationBuilder().token(TOKEN).build()
-
-    print("Бот запущен...")
-    app.run_polling
-
-    print("TOKEN:", TOKEN)
+    print("бот запущен")
     main()
