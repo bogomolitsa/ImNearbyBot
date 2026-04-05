@@ -25,6 +25,8 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
+print("работает")
+
 crisis_words = [
     "хочу умереть",
     "не хочу жить",
@@ -128,6 +130,7 @@ minimal_keyboard = [
 ]
 minimal_markup = ReplyKeyboardMarkup(minimal_keyboard, resize_keyboard=True)
 
+print("клавиатуры работают")
 
 # /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -209,6 +212,8 @@ async def crisis_response(update: Update):
     if is_crisis(text):
         await crisis_response(update)
         return
+
+print("старт робит")
 
 async def us(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_animation(
@@ -591,6 +596,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         ai_reply = await get_ai_response(text)
         await update.message.reply_text(ai_reply)
+
+print("элифы работают")
 
     # Запуск
 def main():
